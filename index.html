@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>扛米 · 一个神</title>
+<meta name="description" content="扛米的个人主页与作品集。负责把米扛起来，也负责把事做成。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230B0B0D'/%3E%3Ccircle cx='32' cy='32' r='21' fill='none' stroke='%2328282E' stroke-width='5'/%3E%3Ccircle cx='32' cy='32' r='9' fill='%23E5312B'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://miaoda.feishu.cn">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Sans+SC:wght@400;500;900&amp;display=swap">
+<style>
+/* ===== 基础 token（影视飓风式：黑 + 红 + 极简大排印） ===== */
+:root{
+  --bg:#0B0B0D;
+  --panel:#131316;
+  --panel-2:#18181C;
+  --line:#26262B;
+  --ink:#F4F4F2;
+  --ink-soft:#9A9AA3;
+  --ink-dim:#63636B;
+  --red:#E5312B;
+  --red-soft:rgba(229,49,43,.12);
+  --red-line:rgba(229,49,43,.45);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+  font-weight:400;
+  line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+::selection{background:var(--red);color:#fff}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--red);outline-offset:3px;border-radius:2px}
+
+/* ===== 顶栏（官网式：logo 左 + 菜单右） ===== */
+.topbar{
+  position:fixed;top:0;left:0;right:0;z-index:50;
+  background:rgba(11,11,13,.78);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  border-bottom:1px solid rgba(38,38,43,.6);
+}
+.topbar-inner{
+  max-width:1240px;margin:0 auto;padding:0 22px;
+  height:62px;display:flex;align-items:center;justify-content:space-between;gap:20px;
+}
+.brand{display:inline-flex;align-items:center;gap:10px;font-weight:900;font-size:1.06rem;letter-spacing:.05em;text-decoration:none;white-space:nowrap}
+.brand .logo{width:26px;height:26px;flex:none}
+.brand .dot{color:var(--red)}
+.topnav{display:flex;align-items:center;gap:30px;list-style:none}
+.topnav a{
+  font-size:.9rem;font-weight:500;color:var(--ink-soft);text-decoration:none;
+  border-bottom:1px solid transparent;padding:4px 0;
+  transition:color .2s,border-color .2s;
+}
+.topnav a:hover{color:var(--ink);border-color:var(--red)}
+
+/* ===== Hero（官网式：全屏画面 + 中央大字 + 底部品牌字 + 右下角按钮） ===== */
+.hero{
+  position:relative;min-height:100svh;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+  padding:120px 22px 88px;overflow:hidden;
+  background:
+    linear-gradient(180deg, rgba(11,11,13,.58) 0%, rgba(11,11,13,.16) 45%, rgba(11,11,13,.9) 100%),
+    url('assets/hero.jpg') center 32% / cover no-repeat var(--bg);
+}
+.hero-inner{position:relative;z-index:2;max-width:860px}
+.kicker{
+  display:inline-flex;align-items:center;gap:14px;
+  font-size:.8rem;font-weight:500;letter-spacing:.3em;color:var(--red);
+  margin-bottom:34px;
+}
+.kicker::before,.kicker::after{content:"";width:42px;height:2px;background:var(--red)}
+.hero-title{
+  font-weight:900;line-height:1.02;letter-spacing:.01em;
+  font-size:clamp(4rem,16vw,9rem);
+}
+.hero-sub{
+  margin-top:18px;
+  font-weight:900;font-size:clamp(1.5rem,5vw,2.5rem);color:var(--red);
+  letter-spacing:.02em;
+}
+.hero-desc{
+  margin:26px auto 0;max-width:30em;
+  color:#C6C9D0;font-size:.98rem;line-height:2.1;
+}
+.hero-desc strong{color:#fff;font-weight:500}
+.hero-brands{
+  position:absolute;left:0;right:0;bottom:0;z-index:2;
+  display:flex;align-items:flex-end;justify-content:space-between;
+  padding:0 26px 26px;
+  font-size:.72rem;font-weight:500;letter-spacing:.3em;color:var(--ink-dim);
+}
+.hero-brands .right{text-align:right}
+.hero-help{
+  position:absolute;right:26px;bottom:64px;z-index:3;
+  width:42px;height:42px;border-radius:50%;
+  border:1px solid var(--line);background:rgba(19,19,22,.72);
+  color:var(--ink-soft);font-size:1.05rem;font-weight:900;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:border-color .2s,color .2s,transform .2s;
+}
+.hero-help:hover{border-color:var(--red);color:var(--red);transform:scale(1.06)}
+
+/* 入场动画 */
+.load-reveal{opacity:0}
+.load-reveal.is-in{animation:rise .8s cubic-bezier(.2,.7,.3,1) forwards}
+.load-reveal.d1{animation-delay:.05s}
+.load-reveal.d2{animation-delay:.22s}
+.load-reveal.d3{animation-delay:.38s}
+.load-reveal.d4{animation-delay:.55s}
+@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+
+/* ===== 内容区（官网式：EN 眉标 + 中文标题 + 右侧链接 + 卡片） ===== */
+main{max-width:1240px;margin:0 auto;padding:0 22px}
+section{padding:108px 0 0}
+.sec-head{display:flex;align-items:baseline;gap:22px;margin-bottom:14px}
+.sec-head .en{font-size:.8rem;font-weight:500;letter-spacing:.3em;color:var(--red);white-space:nowrap}
+.sec-head .bar{flex:1;height:1px;background:var(--line)}
+.sec-head .more{
+  font-size:.86rem;font-weight:500;color:var(--ink-soft);text-decoration:none;
+  white-space:nowrap;border-bottom:1px solid transparent;cursor:pointer;
+  transition:color .2s,border-color .2s;
+}
+.sec-head .more:hover{color:var(--ink);border-color:var(--red)}
+.sec-title{font-weight:900;font-size:clamp(1.7rem,5.4vw,2.5rem);letter-spacing:.02em;margin:4px 0 14px}
+.sec-intro{color:var(--ink-soft);font-size:.94rem;max-width:46em;margin-bottom:38px}
+.sec-intro .note{color:var(--red);font-size:.82rem;letter-spacing:.06em}
+
+/* 项目卡（官网素材卡式：顶图 + 标题 + 描述） */
+.projects{grid-template-columns:1fr;display:grid;gap:14px}
+.card{
+  background:var(--panel);border:1px solid var(--line);
+  display:flex;flex-direction:column;overflow:hidden;
+  transition:border-color .25s,transform .25s;
+}
+.card:hover{border-color:var(--red);transform:translateY(-3px)}
+.card-cover{
+  position:relative;height:132px;overflow:hidden;border-bottom:1px solid var(--line);
+  display:flex;align-items:center;justify-content:center;
+}
+.card-cover .wm{
+  font-weight:900;font-size:4rem;line-height:1;letter-spacing:.02em;
+  color:rgba(255,255,255,.14);
+}
+.card-cover .no{
+  position:absolute;top:12px;right:14px;
+  font-size:.72rem;font-weight:500;letter-spacing:.2em;color:var(--red);
+}
+.card.c1 .card-cover{background:radial-gradient(120% 140% at 20% 0%, #3A1616 0%, #131316 62%)}
+.card.c2 .card-cover{background:radial-gradient(120% 140% at 80% 0%, #2A1B3D 0%, #131316 62%)}
+.card.c3 .card-cover{background:radial-gradient(120% 140% at 20% 100%, #14263A 0%, #131316 62%)}
+.card.c4 .card-cover{background:radial-gradient(120% 140% at 80% 100%, #17342A 0%, #131316 62%)}
+.card-body{padding:20px 20px 22px;display:flex;flex-direction:column;gap:12px;flex:1}
+.card h3{font-weight:900;font-size:1.14rem;line-height:1.35;letter-spacing:.01em}
+.card p{color:var(--ink-soft);font-size:.88rem;line-height:1.9;flex:1}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:2px}
+.tag{
+  font-size:.74rem;font-weight:500;color:var(--red);background:var(--red-soft);
+  border:1px solid var(--red-line);
+  padding:3px 11px;border-radius:999px;letter-spacing:.06em;
+}
+
+/* ===== 联系方式 ===== */
+.contact{padding-bottom:110px}
+.mail-link{
+  display:inline-flex;align-items:center;gap:12px;
+  font-weight:900;font-size:clamp(1.3rem,4.6vw,1.9rem);
+  color:var(--ink);text-decoration:none;
+  border-bottom:2px solid var(--red);padding-bottom:6px;
+  transition:color .2s;word-break:break-all;
+}
+.mail-link:hover{color:var(--red)}
+.mail-link svg{flex:none;width:1.15em;height:1.15em;stroke:currentColor;stroke-width:1.8;fill:none}
+.channels{display:flex;flex-wrap:wrap;gap:14px;margin-top:40px}
+.channel{
+  display:inline-flex;align-items:center;gap:9px;
+  font-size:.9rem;font-weight:500;color:var(--ink);
+  background:transparent;border:1px solid var(--line);border-radius:999px;
+  padding:9px 20px;cursor:pointer;
+  transition:border-color .2s,color .2s;
+}
+.channel svg{width:1em;height:1em;stroke:currentColor;stroke-width:1.8;fill:none;flex:none}
+.channel:hover{border-color:var(--red);color:var(--red)}
+.channel .hint{color:var(--ink-dim);font-size:.78rem}
+
+/* ===== 页脚（官网式：备案行 + 协议链接） ===== */
+footer{border-top:1px solid var(--line);margin-top:110px}
+.foot-inner{max-width:1240px;margin:0 auto;padding:26px 22px 40px}
+.foot-links{display:flex;gap:28px;margin-bottom:16px;flex-wrap:wrap}
+.foot-links a{font-size:.84rem;color:var(--ink-soft);text-decoration:none;border-bottom:1px solid transparent;cursor:pointer;transition:color .2s,border-color .2s}
+.foot-links a:hover{color:var(--ink);border-color:var(--red)}
+.foot-legal{display:flex;flex-wrap:wrap;gap:8px 26px;font-size:.78rem;color:var(--ink-dim)}
+.foot-legal .g{color:var(--red)}
+
+/* ===== 弹层（关于） ===== */
+#about-modal{
+  position:fixed;inset:0;z-index:90;display:none;
+  align-items:center;justify-content:center;padding:22px;
+  background:rgba(0,0,0,.66);
+}
+#about-modal.show{display:flex}
+.modal-card{
+  background:var(--panel-2);border:1px solid var(--line);border-top:3px solid var(--red);
+  max-width:440px;width:100%;padding:34px 30px 30px;position:relative;
+  animation:rise .3s ease;
+}
+.modal-card h3{font-weight:900;font-size:1.3rem;margin-bottom:16px}
+.modal-card h3 span{color:var(--red)}
+.modal-card p{color:var(--ink-soft);font-size:.92rem;line-height:2}
+.modal-close{
+  position:absolute;top:14px;right:16px;border:none;background:none;
+  color:var(--ink-dim);font-size:1.3rem;cursor:pointer;line-height:1;
+  width:32px;height:32px;transition:color .2s;
+}
+.modal-close:hover{color:var(--red)}
+
+/* ===== Toast ===== */
+#toast{
+  position:fixed;left:50%;bottom:30px;transform:translateX(-50%) translateY(16px);
+  background:var(--panel-2);color:var(--ink);
+  border:1px solid var(--line);border-top:2px solid var(--red);
+  font-size:.86rem;padding:12px 22px;border-radius:8px;
+  opacity:0;pointer-events:none;transition:opacity .3s,transform .3s;
+  max-width:calc(100vw - 44px);text-align:center;z-index:99;
+}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ===== 滚动揭示 ===== */
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
+.reveal.in-view{opacity:1;transform:none}
+
+/* ===== 宽屏适配 ===== */
+@media (min-width:768px){
+  section{padding:130px 0 0}
+  .projects{grid-template-columns:repeat(2,1fr)}
+  .card-cover{height:150px}
+}
+@media (min-width:1080px){
+  .projects{grid-template-columns:repeat(4,1fr)}
+}
+@media (max-width:640px){
+  .hero-brands{font-size:.6rem;letter-spacing:.22em;padding:0 18px 20px}
+  .hero-help{right:18px;bottom:60px;width:38px;height:38px}
+  .topnav{gap:20px}
+  .topnav a{font-size:.84rem}
+}
+
+/* ===== 无障碍：减少动效 ===== */
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .load-reveal{opacity:1;animation:none}
+  .reveal{opacity:1;transform:none;transition:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== 顶栏（logo + 菜单） ===== -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="#top" aria-label="扛米主页">
+      <svg class="logo" viewBox="0 0 26 26" fill="none" aria-hidden="true">
+        <circle cx="13" cy="13" r="11.5" stroke="#26262B" stroke-width="1.4"/>
+        <circle cx="13" cy="13" r="7" stroke="#313138" stroke-width="1.2"/>
+        <circle cx="13" cy="13" r="2.6" fill="#E5312B"/>
+      </svg>
+      扛米<span class="dot">.</span>
+    </a>
+    <nav aria-label="主导航">
+      <ul class="topnav">
+        <li><a href="#projects">项目作品</a></li>
+        <li><a href="#contact">联系方式</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<!-- ===== Hero（全屏画面 + 中央大字 + 底部品牌字 + 问号按钮） ===== -->
+<section class="hero" id="top">
+  <div class="hero-inner">
+    <span class="kicker load-reveal is-in">个人主页</span>
+    <h1 class="hero-title load-reveal is-in">扛米</h1>
+    <p class="hero-sub load-reveal is-in d2">一个神</p>
+    <p class="hero-desc load-reveal is-in d3">
+      从小 我便和我的剑订下契约<br>
+       <strong></strong> 杀掉所有比我帅的人 可这么多年了 我的剑从未出鞘
+    </p>
+  </div>
+  <div class="hero-brands load-reveal is-in d4" aria-hidden="true">
+    <span>KANGMI</span>
+    <span class="right">PORTFOLIO · 2026</span>
+  </div>
+  <button class="hero-help" type="button" aria-label="关于扛米" title="关于扛米">?</button>
+</section>
+
+<main>
+  <!-- ===== 内容区：神迹一览 ===== -->
+  <section id="projects">
+    <div class="sec-head reveal">
+      <span class="en">PROJECTS</span>
+      <span class="bar"></span>
+      <a class="more" role="button" tabindex="0" data-toast="没有别的项目">更多项目</a>
+    </div>
+    <h2 class="sec-title reveal">神迹一览</h2>
+    <p class="sec-intro reveal">
+      以下为神的代表作节选
+      <span class="note"></span>
+    </p>
+
+    <div class="projects">
+      <article class="card c1 reveal">
+        <div class="card-cover" aria-hidden="true">
+          <span class="no">NO.01</span>
+          <span class="wm">01</span>
+        </div>
+        <div class="card-body">
+          <h3>扛米工程 v1</h3>
+          <p>把一袋水泥从 A 点扛到 B 点</p>
+          <div class="tags"><span class="tag">搬运</span><span class="tag">力学</span></div>
+        </div>
+      </article>
+      <article class="card c2 reveal">
+        <div class="card-cover" aria-hidden="true">
+          <span class="no">NO.02</span>
+          <span class="wm">02</span>
+        </div>
+        <div class="card-body">
+          <h3>第四魂技</h3>
+          <p>蓝银囚笼 我的蓝银草 火免</p>
+          <div class="tags"><span class="tag">魂技</span><span class="tag">火免</span></div>
+        </div>
+      </article>
+      <article class="card c3 reveal">
+        <div class="card-cover" aria-hidden="true">
+          <span class="no">NO.03</span>
+          <span class="wm">03</span>
+        </div>
+        <div class="card-body">
+          <h3>神明作息表</h3>
+          <p>精确到秒的日程管理，困了就睡</p>
+          <div class="tags"><span class="tag">效率</span><span class="tag">自律</span></div>
+        </div>
+      </article>
+      <article class="card c4 reveal">
+        <div class="card-cover" aria-hidden="true">
+          <span class="no">NO.04</span>
+          <span class="wm">04</span>
+        </div>
+        <div class="card-body">
+          <h3>灭霸</h3>
+          <p>你可以不扎人，但身上必须有刺 你的敷衍像一把利剑，杀死了我所有美好的热情</p>
+          <div class="tags"><span class="tag">有刺</span><span class="tag">利剑</span></div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== 内容区：找到我 ===== -->
+  <section id="contact" class="contact">
+    <div class="sec-head reveal">
+      <span class="en">CONTACT</span>
+      <span class="bar"></span>
+      <a class="more" href="mailto:3586562528@qq.com">发邮件</a>
+    </div>
+    <h2 class="sec-title reveal">找到我</h2>
+    <p class="sec-intro reveal">有事请直接来信，神也会回消息，用的意念回复。</p>
+
+    <a class="mail-link reveal" href="3586562528@qq.com">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+      3586562528@qq.com
+    </a>
+
+    <div class="channels reveal">
+      <button class="channel" type="button" data-placeholder="神秘">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg>
+        GitHub<span class="hint">占位</span>
+      </button>
+      <button class="channel" type="button" data-placeholder="也神秘">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="14" r="6.5"/><circle cx="11" cy="14" r="2.6"/><path d="M15.5 3.2c1.9.5 3 1.9 3.4 3.8M19 4.6c1.6.5 2.5 1.8 2.8 3.6"/></svg>
+        微博<span class="hint">占位</span>
+      </button>
+      <button class="channel" type="button" data-placeholder="还是神秘">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.2 4C5.3 4 2.5 6.4 2.5 9.4c0 1.7.9 3.2 2.3 4.2l-.6 1.9 2.2-1.1c.5.1 1 .2 1.5.2M14.8 4c3.9 0 6.7 2.4 6.7 5.4 0 2.9-2.7 5.3-6.4 5.4l-2.4 1.2.7-2.1c1.5-.9 2.5-2.4 2.5-4.1 0-1.1-.5-2.1-1.4-2.9"/></svg>
+        微信<span class="hint"></span>
+      </button>
+    </div>
+  </section>
+</main>
+
+<!-- ===== 页脚（备案式） ===== -->
+<footer>
+  <div class="foot-inner">
+    <div class="foot-links">
+      <a role="button" tabindex="0" data-toast="没有">用户协议</a>
+      <a role="button" tabindex="0" data-toast="也没有">隐私协议</a>
+    </div>
+    <div class="foot-legal">
+      <span>© 2026 扛米</span>
+      <span>一个神<span class="g"> · </span>以米之名</span>
+      <span>KANGMI PORTFOLIO</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ===== 关于弹层 ===== -->
+<div id="about-modal" role="dialog" aria-modal="true" aria-label="关于扛米">
+  <div class="modal-card">
+    <button class="modal-close" type="button" aria-label="关闭">×</button>
+    <h3>关于扛米<span>.</span></h3>
+    <p>我也是说</p>
+  </div>
+</div>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+  var toastEl = document.getElementById('toast');
+  var toastTimer = null;
+  function showToast(msg){
+    toastEl.textContent = msg;
+    toastEl.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ toastEl.classList.remove('show'); }, 2600);
+  }
+
+  // 占位链接：给真实反馈
+  document.querySelectorAll('[data-toast]').forEach(function(el){
+    var msg = el.getAttribute('data-toast');
+    function act(e){
+      e.preventDefault();
+      showToast(msg);
+    }
+    el.addEventListener('click', act);
+    el.addEventListener('keydown', function(e){
+      if (e.key === 'Enter' || e.key === ' ') act(e);
+    });
+  });
+
+  // 占位渠道
+  document.querySelectorAll('.channel').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      showToast('「' + btn.getAttribute('data-placeholder') + '」');
+    });
+  });
+
+  // 关于弹层
+  var modal = document.getElementById('about-modal');
+  document.querySelector('.hero-help').addEventListener('click', function(){
+    modal.classList.add('show');
+  });
+  modal.addEventListener('click', function(e){
+    if (e.target === modal || e.target.classList.contains('modal-close')) {
+      modal.classList.remove('show');
+    }
+  });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && modal.classList.contains('show')) modal.classList.remove('show');
+  });
+
+  // 滚动揭示
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var revealEls = document.querySelectorAll('.reveal');
+  if (reduceMotion || !('IntersectionObserver' in window)) {
+    revealEls.forEach(function(el){ el.classList.add('in-view'); });
+  } else {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    revealEls.forEach(function(el){ io.observe(el); });
+  }
+})();
+</script>
+</body>
+</html>
